@@ -1,0 +1,25 @@
+{
+  "name": "ig-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node-pg-migrate",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dedent": "^1.5.3",
+    "express": "^4.21.2",
+    "ig-test": "file:",
+    "jest": "^29.7.0",
+    "node-pg-migrate": "^7.9.1",
+    "nodemon": "^3.1.9",
+    "pg": "^8.14.1",
+    "pg-format": "^1.0.4",
+    "supertest": "^7.0.0"
+  }
+}

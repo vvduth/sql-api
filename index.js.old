@@ -1,0 +1,74 @@
+const express = require("express");
+const pg = require("pg");
+
+const pool = new pg.Pool({
+  user: "postgres",
+  password: "admin",
+  database: "social",
+  host: "localhost",
+  port: 5432,
+});
+
+//pool.query("select 1+1").then((res) => console.log(res));
+
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/post", async (req, res) => {
+  const { rows } = await pool.query(`
+        select * from posts;`);
+
+  res.send(`
+         <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>lng</th>
+                    <th>lat</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows
+                  .map((row) => {
+                    return `
+                    <tr>
+                      <td>${row.id}</td>
+                    <td>${row.loc.x}</td>
+                    <td>${row.loc.y}</td></tr>
+                  
+
+                    `;
+                  })
+                  .join("")}
+            </tbody>
+        </table>
+           <form method="POST">
+        <h3>Create posr</h3>
+        <div>
+          <label>Long</label>
+          <input name="lng" />
+        </div>
+        <div>
+            <label>LAT</label>
+            <input name="lat" />
+          </div>
+          <button type="submit">Create</button>
+      </form>
+        `);
+});
+
+
+app.post('/post', async (req, res ) => {
+    const {lng, lat} = req.body; 
+    await pool.query(`insert into posts 
+      (url, caption,  loc) 
+      values ($1,$2,$3);`,
+        ['yo','hello fuyioh',`(${lng},${lat})`]
+    )
+
+    res.redirect('/post')
+})
+
+app.listen(3004, () => {
+    console.log(`Listening to....`)
+})
