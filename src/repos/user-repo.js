@@ -1,17 +1,51 @@
 const pool = require("../pool");
-const tocamelcamse = require('./utils/to-camel-case')
+const toCamelCase = require("./utils/to-camel-case");
 class UserRepo {
   static async find() {
     const { rows } = await pool.query("select * from users;");
 
-   
-    return tocamelcamse(rows);
+    return toCamelCase(rows);
   }
-  static async findById() {}
-  static async insert() {}
-  static async update() {}
+  static async findById(id) {
+    console.log(id);
+    const { rows } = await pool.query(
+      `select * from users
+        where id = $1;`,
+      [id]
+    );
 
-  static async delete() {}
+    return toCamelCase(rows)[0];
+  }
+  static async insert(username, bio) {
+    const { rows } = await pool.query(
+      `
+        insert into users (username, bio) 
+        values ($1, $2) returning *;`,
+      [username, bio]
+    );
+
+    return toCamelCase(rows);
+  }
+  static async update(id, username, bio) {
+    const {rows } = await pool.query(
+        `update users set username = $1,
+        bio = $2 where id = $3 returning *;`, [
+            username, bio, id
+        ]
+    )
+
+    return toCamelCase(rows)[0]
+  }
+
+  static async delete(id) {
+    const {rows } = await pool.query(
+        `delete from users where
+        id = $1 returning *;`, [
+            id
+        ]
+    )
+    return toCamelCase(rows)[0]
+  }
 }
 
 module.exports = UserRepo;
