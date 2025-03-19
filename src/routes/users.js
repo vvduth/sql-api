@@ -1,9 +1,12 @@
 const express = require('express')
+const UserRepo = require('../repos/user-repo')
 
 const router = express.Router();
 
 router.get('/users', async (req, res) => {
+    const user = await UserRepo.find()
 
+    res.send(user);
 })
 
 router.get('/users/:id', async (req, res) => {
