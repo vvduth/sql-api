@@ -1,23 +1,17 @@
-const pool = require('../pool')
-
+const pool = require("../pool");
+const tocamelcamse = require('./utils/to-camel-case')
 class UserRepo {
-    static async  find() {
-        const {rows } = await pool.query('select * from users;')
-        return rows 
-    }
-    static async  findById(){
+  static async find() {
+    const { rows } = await pool.query("select * from users;");
 
-    }
-    static async  insert() {
+   
+    return tocamelcamse(rows);
+  }
+  static async findById() {}
+  static async insert() {}
+  static async update() {}
 
-    }
-    static async  update() {
-
-    }
-
-    static async  delete() {
-
-    }
+  static async delete() {}
 }
 
 module.exports = UserRepo;
